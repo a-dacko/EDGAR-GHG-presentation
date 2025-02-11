@@ -453,6 +453,14 @@ gdp_index_data=gdp_data%>%
   dplyr::mutate(GDP_index_1999 = IndexNumber::index.number.serie(`GDP`,name="GDP Total") %>% dplyr::pull("Index number")) %>% 
   ungroup() 
 
+gdp_data%>% 
+  dplyr::filter(`Country Code` %in% union(euro_area_countries_3letter,G20_countries_3letter)) %>%
+  dplyr::filter(`Time period`>=1999) %>% select(-`Indicator Name`) %>% 
+  dplyr::group_by(`Country Code`) %>% 
+  dplyr::arrange(`Time period`) %>%
+  dplyr::mutate(GDP_index_1999 = IndexNumber::index.number.serie(`GDP`,name="GDP Total") %>% dplyr::pull("Index number")) %>% 
+  ungroup() 
+
 
 data_chart1_granular=EDGAR_2024_totals %>% 
   dplyr::filter(`EDGAR Country Code` %in% union(euro_area_countries_3letter,G20_countries_3letter)) %>% tidyr::pivot_longer(cols =dplyr::matches("^\\d{4}$"), names_to = "Time period",values_to='GHG Total') %>% 
@@ -510,6 +518,7 @@ final_data_granular_gdp%>%filter(Country=="Germany") %>%
         plot.subtitle = element_text(face= "italic",size = 10),
         plot.title.position = "plot",plot.caption.position ="plot" )+scale_color_manual(values = c("#00B1EA","#007816"))+
   xlim(c(1999,2023))+
+  ylim(c(60,150))+
   xlab("")+
   ylab("")
 
@@ -530,6 +539,7 @@ final_data_granular_gdp%>%filter(Country=="France and Monaco") %>%
         plot.subtitle = element_text(face= "italic",size = 10),
         plot.title.position = "plot",plot.caption.position ="plot" )+scale_color_manual(values = c("#00B1EA","#007816"))+
   xlim(c(1999,2023))+
+  ylim(c(60,150))+
   xlab("")+
   ylab("")
 final_data_granular_gdp%>%filter(Country=="China") %>% 
@@ -622,6 +632,26 @@ energy_data=read.csv("./data/yearly_full_release_long_format.csv",header = T,che
 str(energy_data)
 
 cleaned__energy_data=energy_data %>%  filter(if_any(c(`EU`, `G20`), ~ . == 1)) %>% filter(Category %in% c("Electricity generation", "Power sector emissions")) %>% filter(Variable %in% c('Fossil','Clean')) %>% filter(Unit %in% c("%","mtCO2","TWh")) %>% select(-c(Subcategory,`Ember region`,Continent,`Area type`))
+
+colScale2=scale_fill_manual(values = c("#CEE1AF","#98A1D0"))
+
+cleaned__energy_data %>% filter(G20 == 1 ) %>% filter(`Unit` == "TWh") %>% group_by(`Year`, `Variable`) %>% mutate(Value=sum(Value)) %>% ungroup() %>% select(Year,Variable,Value) %>% distinct() %>% group_by(`Year`) %>% mutate(`Production contribution`=Value/sum(Value)*100) %>% ungroup()%>% 
+  ggplot(., aes(x = `Year`, y = `Production contribution`, fill = `Variable`)) +
+  geom_bar(stat = "identity", position = "fill") +
+  colScale2+
+  labs(x = "Year", y = "Percentage Contribution", title = "G20 - Electricity generation over Time") +
+  theme_minimal()
+
+
+cleaned__energy_data %>% filter(`Country code` %in% euro_area_countries_3letter ) %>% filter(`Unit` == "TWh") %>% group_by(`Year`, `Variable`) %>% mutate(Value=sum(Value)) %>% ungroup() %>% select(Year,Variable,Value) %>% distinct() %>% group_by(`Year`) %>% mutate(`Production contribution`=Value/sum(Value)*100) %>% ungroup()%>% 
+  ggplot(., aes(x = `Year`, y = `Production contribution`, fill = `Variable`)) +
+  geom_bar(stat = "identity", position = "fill") +
+  colScale2+
+  labs(x = "Year", y = "Percentage Contribution", title = "Euro Area - Electricity generation over Time") +
+  theme_minimal()
+
+cleaned__energy_data=energy_data %>%  filter(if_any(c(`EU`, `G20`), ~ . == 1)) %>% filter(Category %in% c("Electricity generation", "Power sector emissions")) %>% filter(Variable %in% c('Coal','Fossil','Clean')) %>% filter(Unit %in% c("%","mtCO2","TWh")) %>% select(-c(Subcategory,`Ember region`,Continent,`Area type`))
+
 
 write.csv(cleaned__energy_data,"./data/cleaned__energy_data.csv")
 ```
