@@ -135,7 +135,7 @@ ggplot(data_summary, aes(x=`Time period`,`contribution`,fill=`YearType`))+
   theme_minimal()+
   ylim(c(0,90))+
   theme(legend.position = "bottom",
-        text = element_text(color = "#5C5C5C"),
+        text = element_text(color = "#5C5C5C", size=13),
         legend.title=element_blank(),
         legend.margin = margin(t = -15),
         axis.title.y =element_blank(),
@@ -143,7 +143,7 @@ ggplot(data_summary, aes(x=`Time period`,`contribution`,fill=`YearType`))+
         axis.text=element_text(size=10),
         plot.title = element_text(size = 16),
         plot.subtitle = element_text(face= "italic",size = 13),
-        strip.text.x = element_text(size = 12),
+        strip.text.x = element_text(size = 15),
         plot.title.position = "plot",plot.caption.position ="plot" )+scale_fill_manual(values = c("PreviousEA" = "#a6bbe0", "LatestEA" = "#003899", "LatestG20" = "#ff4b00", "PreviousG20"="#fac0a7")) +labs(title="Contribution to Global emissions",subtitle = "% of total Global emissions")
 
 #### Plot 2 ####
@@ -158,10 +158,10 @@ G20_summary %>% dplyr::filter(`Time period`=="2023") %>% ggplot(., aes(area = `C
         legend.margin = margin(t = -15),
         axis.title.y =element_text(size=15),
         axis.text=element_text(size=11),
-        plot.title = element_text(size = 15),
+        plot.title = element_text(size = 18),
         plot.subtitle = element_text(face= "italic",size = 12),
         plot.title.position = "plot",plot.caption.position ="plot" )+scale_fill_manual(values = c("#ff4b00"))+
-  ggtitle("Contribution of individual countries' GHG emissions to G20 emissions")
+  ggtitle("G20 - Contribution of individual countries emissions")
 
 
 #### Plot 3 ####
@@ -176,10 +176,10 @@ EA_summary %>% dplyr::filter(`Time period`=="2023")   %>% ggplot(., aes(area = `
         legend.margin = margin(t = -15),
         axis.title.y =element_text(size=15),
         axis.text=element_text(size=11),
-        plot.title = element_text(size = 14),
+        plot.title = element_text(size = 18),
         plot.subtitle = element_text(face= "italic",size = 12),
         plot.title.position = "plot",plot.caption.position ="plot" )+scale_fill_manual(values = c("#003899"))+
-  ggtitle("Contribution of individual countries' GHG emissions to Euro Area emissions")
+  ggtitle("Euro Area - Contributions of individual countries emissions")
 
 ```
 
@@ -357,7 +357,7 @@ data_chart2_g20$Sector <- factor(data_chart2_euro_area$Sector, levels = c("Waste
 
 
 data_chart2_g20  %>%
-  mutate(Sector = fct_reorder(Sector, `contribution`, .fun = sum, .desc = FALSE)) %>% ggplot(., aes(x=`Time period`, y=`contribution`, fill=Sector)) + 
+  mutate(Sector = fct_reorder(Sector, `GHG Total`, .fun = sum, .desc = FALSE)) %>% ggplot(., aes(x=`Time period`, y=`GHG Total`, fill=Sector)) + 
       geom_area()+ theme_minimal()+
   theme(legend.position = "bottom",
         text = element_text(color = "#5C5C5C"),
@@ -377,7 +377,7 @@ data_chart2_g20  %>%
 out=data_chart2_euro_area  %>%
   mutate(Sector = fct_reorder(Sector, `GHG Total`, .fun = sum, .desc = FALSE))
 
-colScale2=scale_fill_manual(values = c("#5C5C5C","#00B1EA","#007816","#65b800","#ff4b00","#8139C6","#FFB400","#003899"))
+colScale2=scale_fill_manual(values = c("#5C5C5C","#00B1EA","#007816","#ff4b00","#65b800","#8139C6","#FFB400","#003899"))
 
 data_chart2_euro_area$Sector <- factor(data_chart2_euro_area$Sector, levels = c("Waste","Fuel Exploitation","Processes","Industrial Combustion",  "Agriculture","Buildings","Transport" ,  "Power Industry"))
 
@@ -525,7 +525,7 @@ data_chart3%>%
   geom_line(linewidth = 0.85,alpha =0.8)+
   geom_hline(yintercept=100)+
   
-  ggtitle("Greenhouse Gasses Emission vs GDP", subtitle = "Index 1999=100")+
+  ggtitle("GDP vs Greenhouse Gasses Emission", subtitle = "Index 1999=100")+
   theme_minimal()+
   theme(legend.position = "bottom",
         text = element_text(color = "#5C5C5C"),
@@ -535,8 +535,8 @@ data_chart3%>%
         axis.title.y =element_text(size=15),
         axis.text=element_text(size=11),
         plot.title = element_text(size = 16),
-        strip.text.x = element_text(size = 12),
-        plot.subtitle = element_text(face= "italic",size = 12),
+        strip.text.x = element_text(size = 14),
+        plot.subtitle = element_text(face= "italic",size = 1),
         plot.title.position = "plot",plot.caption.position ="plot" )+col_patette+
   xlim(c(1999,2023))+
   xlab("")+
@@ -548,7 +548,7 @@ final_data_granular_gdp%>%filter(Country=="Germany") %>%
   geom_line(linewidth = 0.85,alpha =0.8)+
   geom_hline(yintercept=100)+
   
-  ggtitle("Germany - Greenhouse Gasses Emission vs GDP", subtitle = "Index 1999=100")+
+  ggtitle("Germany - GDP vs Greenhouse Gasses Emission", subtitle = "Index 1999=100")+
   theme_minimal()+
   theme(legend.position = "bottom",
         text = element_text(color = "#5C5C5C"),
@@ -570,7 +570,7 @@ final_data_granular_gdp%>%filter(Country=="France and Monaco") %>%
   geom_line(linewidth = 0.85,alpha =0.8)+
   geom_hline(yintercept=100)+
   
-  ggtitle("France - Greenhouse Gasses Emission vs GDP", subtitle = "Index 1999=100")+
+  ggtitle("France - GDP vs Greenhouse Gasses Emission", subtitle = "Index 1999=100")+
   theme_minimal()+
   theme(legend.position = "bottom",
         text = element_text(color = "#5C5C5C"),
@@ -591,7 +591,7 @@ final_data_granular_gdp%>%filter(Country=="China") %>%
   geom_line(linewidth = 0.85,alpha =0.8)+
   geom_hline(yintercept=100)+
   
-  ggtitle("China - Greenhouse Gasses Emission vs GDP", subtitle = "Index 1999=100")+
+  ggtitle("China - GDP vs Greenhouse Gasses Emission", subtitle = "Index 1999=100")+
   theme_minimal()+
   theme(legend.position = "bottom",
         text = element_text(color = "#5C5C5C"),
@@ -612,7 +612,7 @@ final_data_granular_gdp%>%filter(Country=="United States") %>%
   geom_line(linewidth = 0.85,alpha =0.8)+
   geom_hline(yintercept=100)+
   
-  ggtitle("United States - Greenhouse Gasses Emission vs GDP", subtitle = "Index 1999=100")+
+  ggtitle("United States - GDP vs Greenhouse Gasses Emission", subtitle = "Index 1999=100")+
   theme_minimal()+
   theme(legend.position = "bottom",
         text = element_text(color = "#5C5C5C"),
@@ -628,47 +628,7 @@ final_data_granular_gdp%>%filter(Country=="United States") %>%
   xlab("")+
   ylab("")
 
-final_data_granular_gdp%>%filter(Country=="Russia") %>% 
-  ggplot(mapping = aes(x=`Time period`,y=`Index value`,color = Index)) + 
-  geom_line(linewidth = 0.85,alpha =0.8)+
-  geom_hline(yintercept=100)+
-  
-  ggtitle("Russia - Greenhouse Gasses Emission vs GDP", subtitle = "Index 1999=100")+
-  theme_minimal()+
-  theme(legend.position = "bottom",
-        text = element_text(color = "#5C5C5C"),
-        legend.title=element_blank(),
-        legend.text = element_text(size=12),
-        legend.margin = margin(t = -15),
-        axis.title.y =element_text(size=15),
-        axis.text=element_text(size=11),
-        plot.title = element_text(size = 16),
-        plot.subtitle = element_text(face= "italic",size = 12),
-        plot.title.position = "plot",plot.caption.position ="plot" )+col_patette+
-  xlim(c(1999,2023))+
-  xlab("")+
-  ylab("")
 
-final_data_granular_gdp%>%filter(Country=="India") %>% 
-  ggplot(mapping = aes(x=`Time period`,y=`Index value`,color = Index)) + 
-  geom_line(linewidth = 0.85,alpha =0.8)+
-  geom_hline(yintercept=100)+
-  
-  ggtitle("India - Greenhouse Gasses Emission vs GDP", subtitle = "Index 1999=100")+
-  theme_minimal()+
-  theme(legend.position = "bottom",
-        text = element_text(color = "#5C5C5C"),
-        legend.title=element_blank(),
-        legend.text = element_text(size=12),
-        legend.margin = margin(t = -15),
-        axis.title.y =element_text(size=15),
-        axis.text=element_text(size=11),
-        plot.title = element_text(size = 16),
-        plot.subtitle = element_text(face= "italic",size = 12),
-        plot.title.position = "plot",plot.caption.position ="plot" )+col_patette+
-  xlim(c(1999,2023))+
-  xlab("")+
-  ylab("")
 ```
 
 
@@ -725,7 +685,7 @@ b=data_chart3 %>% filter(`Country`=='Euro Area') %>% filter(`Time period`>=2000)
 )
 cor(a,b)
 cor.test(a,b)
-
+cleaned__energy_data %>% filter(G20 == 1 ) %>% filter(`Unit` == "TWh") %>% group_by(`Year`, `Variable`) %>% mutate(Value=sum(Value)) %>% ungroup() %>% select(Year,Variable,Value) %>% distinct() %>% group_by(`Year`) %>% mutate(`Production contribution`=Value/sum(Value)*100) %>% ungroup()
 
 cleaned__energy_data %>% filter(G20 == 1 ) %>% filter(`Unit` == "TWh") %>% group_by(`Year`, `Variable`) %>% mutate(Value=sum(Value)) %>% ungroup() %>% select(Year,Variable,Value) %>% distinct() %>% group_by(`Year`) %>% mutate(`Production contribution`=Value/sum(Value)*100) %>% ungroup()%>% 
   ggplot(., aes(x = `Year`, y = `Production contribution`, fill = `Variable`)) +
@@ -744,6 +704,8 @@ cleaned__energy_data %>% filter(G20 == 1 ) %>% filter(`Unit` == "TWh") %>% group
         plot.title = element_text(size = 16),
         plot.subtitle = element_text(face= "italic",size = 12),
         plot.title.position = "plot",plot.caption.position ="plot" )
+
+cleaned__energy_data %>% filter(`Country code` %in% euro_area_countries_3letter ) %>% filter(`Unit` == "TWh") %>% group_by(`Year`, `Variable`) %>% mutate(Value=sum(Value)) %>% ungroup() %>% select(Year,Variable,Value) %>% distinct() %>% group_by(`Year`) %>% mutate(`Production contribution`=Value/sum(Value)*100) %>% ungroup()
 
 cleaned__energy_data %>% filter(`Country code` %in% euro_area_countries_3letter ) %>% filter(`Unit` == "TWh") %>% group_by(`Year`, `Variable`) %>% mutate(Value=sum(Value)) %>% ungroup() %>% select(Year,Variable,Value) %>% distinct() %>% group_by(`Year`) %>% mutate(`Production contribution`=Value/sum(Value)*100) %>% ungroup()%>% 
   ggplot(., aes(x = `Year`, y = `Production contribution`, fill = `Variable`)) +
